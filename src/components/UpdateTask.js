@@ -9,6 +9,7 @@ export default function UpdateTask() {
     Content: "",
     Title: "", // Assuming this is a default value
     Image: null,
+    id:taskid
   });
 
   const handleInputChange = (e) => {
@@ -22,6 +23,7 @@ export default function UpdateTask() {
     e.preventDefault();
     const requst = new FormData();
     requst.append("image", formData.Image);
+    requst.append("id", formData.id);
     requst.append("content", formData.Content);
     requst.append("title", formData.Title);
     requst.append("username", "bedo-2003");
