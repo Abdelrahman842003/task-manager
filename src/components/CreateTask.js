@@ -4,7 +4,6 @@ import axios from "axios";
 export default function CreateTask() {
   const [formData, setFormData] = useState({
     Content: "",
-    Username: "bedo-2003",
     Title: "", // Assuming this is a default value
     Image: null,
   });
@@ -18,16 +17,25 @@ export default function CreateTask() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    const requst = new FormData();
+    requst.append("image", formData.Image);
+    requst.append("content", formData.Content);
+    requst.append("title", formData.Title);
+    requst.append("username", "bedo-2003");
 
+    for (const key in formData) {
+      requst.append(key, formData[key]);
+    }
     let config = {
       method: "POST",
       maxBodyLength: Infinity,
       url: "https://task.ecmpp.com/api/task/add",
-      headers: {},
-      data: formData, // Send form data as the request payload
-      
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      // },
+      data: requst, // Send form data as the request payload
     };
-
+    console.log(config);
     axios
       .request(config)
       .then((response) => {
@@ -51,6 +59,7 @@ export default function CreateTask() {
       };
 
       reader.readAsDataURL(file);
+      setFormData((prevData) => ({ ...prevData, Image: file }));
     }
   };
 
@@ -74,10 +83,11 @@ export default function CreateTask() {
             required
             value={formData.Content}
             onChange={handleInputChange}
+           minLength={12}
           />
         </div>
 
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <label
             htmlFor="Username"
             className="block mb-2 text-sm font-medium text-gray-900"
@@ -94,7 +104,7 @@ export default function CreateTask() {
             onChange={handleInputChange}
             readOnly
           />
-        </div>
+        </div> */}
 
         <div className="mb-6">
           <label
@@ -111,6 +121,7 @@ export default function CreateTask() {
             required
             value={formData.Title}
             onChange={handleInputChange}
+            minLength={4}
           />
         </div>
 
@@ -148,7 +159,7 @@ export default function CreateTask() {
                   htmlFor="file-upload"
                   className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                 >
-                  <span>Upload a file</span>
+                  <span>Upload a image</span>
                   <input
                     id="file-upload"
                     name="file-upload"

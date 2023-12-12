@@ -12,6 +12,7 @@ const TaskList = () => {
           "https://task.ecmpp.com/api/task/all/bedo-2003"
         );
         setTasks(response.data); // Assuming the response.data is an array of tasks
+        console.log(response.data.image);
         console.log(tasks);
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -31,7 +32,7 @@ const TaskList = () => {
   };
   return (
     <>
-      <div className="bg-white p-8 rounded-md w-3/4 m-auto">
+      <div className="bg-white p-8 max-sm:p-1 max-sm:w-full max-lg:w-full  max-md:p-1 max-md:w-full  rounded-md w-3/4 m-auto">
         <div className=" flex items-center justify-between pb-6">
           <div>
             <h1 className="text-gray-600 font-semibold">Taskes</h1>
@@ -60,7 +61,7 @@ const TaskList = () => {
                       Title
                     </th>
 
-                    <th className=" px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Options
                     </th>
                   </tr>
@@ -68,13 +69,13 @@ const TaskList = () => {
                 {tasks.map((task) => {
                   return (
                     <tbody key={task.id}>
-                      <tr>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <tr className="">
+                        <td className="px-5 py-5 max-sm:p-1  border-b border-gray-200 bg-white text-sm">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 w-10 h-10">
                               <img
                                 className="w-full h-full rounded-full"
-                                src={task.image}
+                                src={`https://task.ecmpp.com/storage/${task.image}`}
                                 alt=""
                               />
                             </div>
@@ -85,7 +86,7 @@ const TaskList = () => {
                             </div>
                           </div>
                         </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <td className="px-5 py-5 max-sm:p-1  border-b border-gray-200 bg-white text-sm">
                           <p className="text-gray-900 whitespace-no-wrap">
                             {task.content}
                           </p>
@@ -95,22 +96,15 @@ const TaskList = () => {
                             className="inline-flex rounded-md shadow-sm "
                             role="group"
                           >
-                            <Link to={"create"}>
+                            <Link to={`/details/${task.id}`}>
                               <button
                                 type="button"
                                 className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-1  focus:text-blue-700 "
                               >
-                                Add
-                              </button>
-                            </Link>
-                            <Link to={`/details/${task.id}`}>
-                              <button
-                                type="button"
-                                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-1  focus:text-blue-700 "
-                              >
                                 Veiw
                               </button>
                             </Link>
+
                             <button
                               onClick={() => handleDelete(task.id)}
                               type="button"

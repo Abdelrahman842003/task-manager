@@ -29,7 +29,11 @@ const TaskDetails = () => {
             <h1 className="py-6">Show Task {taskid}</h1>
 
             <div className="mb-6">
-              <img className="w-1/2" alt="" src={task.image} />
+              <img
+                className="w-1/2"
+                alt=""
+                src={`https://task.ecmpp.com/storage/${task.image}`}
+              />
             </div>
             <div className="mb-6">
               <label
