@@ -2,15 +2,69 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-export default function CreateTask() {
+export default function UpdateTask() {
+  let { taskid } = useParams();
+
   const [formData, setFormData] = useState({
     Content: "",
-    Title: "",
+    Title: "", // Assuming this is a default value
     Image: null,
   });
 
-  const { taskid } = useParams();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const requst = new FormData();
+    requst.append("image", formData.Image);
+    requst.append("content", formData.Content);
+    requst.append("title", formData.Title);
+    requst.append("username", "bedo-2003");
 
+    for (const key in formData) {
+      requst.append(key, formData[key]);
+    }
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `https://task.ecmpp.com/api/task/edit`,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: requst, // Send form data as the request payload
+    };
+    console.log(config);
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(formData);
+      })
+      .catch((error) => {
+        console.log("error");
+      });
+  };
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        // After the image is loaded, update the state
+        setSelectedImage(reader.result);
+      };
+
+      reader.readAsDataURL(file);
+      setFormData((prevData) => ({ ...prevData, Image: file }));
+    }
+  };
   useEffect(() => {
     axios
       .get(`https://task.ecmpp.com/api/task/Show/${taskid}`)
@@ -28,58 +82,10 @@ export default function CreateTask() {
       });
   }, [taskid]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-
-      reader.readAsDataURL(file);
-      setFormData((prevData) => ({ ...prevData, Image: file }));
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const request = new FormData();
-    request.append("image", formData.Image);
-    request.append("content", formData.Content);
-    request.append("title", formData.Title);
-    request.append("username", "bedo-2003");
-
-    for (const key in formData) {
-      request.append(key, formData[key]);
-    }
-
-    axios
-      .post(`https://task.ecmpp.com/api/task/edit`, request)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const [selectedImage, setSelectedImage] = useState(null);
-
   return (
     <div>
       <form className="px-28" onSubmit={handleSubmit}>
-        <h1 className="py-6"> Update Value id ({taskid})</h1>
+        <h1 className="py-6">Add Task</h1>
 
         <div className="mb-6">
           <label
@@ -99,6 +105,25 @@ export default function CreateTask() {
             minLength={12}
           />
         </div>
+
+        {/* <div className="mb-6">
+          <label
+            htmlFor="Username"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Username:
+          </label>
+          <input
+            type="text"
+            id="Username"
+            name="Username"
+            className="bg-gray-50 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+            value={formData.Username}
+            onChange={handleInputChange}
+            readOnly
+          />
+        </div> */}
 
         <div className="mb-6">
           <label
@@ -153,7 +178,7 @@ export default function CreateTask() {
                   htmlFor="file-upload"
                   className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                 >
-                  <span>New Upload a image</span>
+                  <span>Upload a image</span>
                   <input
                     id="file-upload"
                     name="file-upload"
@@ -175,7 +200,7 @@ export default function CreateTask() {
             type="submit"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Update Value
+            Submit
           </button>
         </div>
       </form>
