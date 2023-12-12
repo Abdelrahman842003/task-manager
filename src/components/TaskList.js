@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,6 +17,9 @@ const TaskList = () => {
         console.log(tasks);
       } catch (error) {
         console.error("Error fetching tasks:", error);
+      } finally {
+        // Set loading to false regardless of success or failure
+        setIsLoading(false);
       }
     };
 
@@ -31,25 +35,35 @@ const TaskList = () => {
     }
   };
   return (
-    <>
-      <div className="bg-white p-8 max-sm:p-1 max-sm:w-full max-lg:w-full  max-md:p-1 max-md:w-full  rounded-md w-3/4 m-auto">
-        <div className=" flex items-center justify-between pb-6">
-          <div>
-            <h1 className="text-gray-600 font-semibold">Taskes</h1>
-            <span className="text-xs">All task item</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <Link to={"create"}>
-              <div className="lg:ml-40 ml-10 space-x-8">
-                <button className="bg-green-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
-                  Add Task
-                </button>
-              </div>
-            </Link>
-          </div>
-        </div>
+    <div className="bg-white p-8 max-sm:p-1 max-sm:w-full max-lg:w-full  max-md:p-1 max-md:w-full  rounded-md w-3/4 m-auto">
+      <div className="flex items-center justify-between pb-6">
         <div>
-          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+          <h1 className="text-gray-600 font-semibold">Tasks</h1>
+          <span className="text-xs">All task items</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <Link to={"create"}>
+            <div className="lg:ml-40 ml-10 space-x-8">
+              <button className="bg-green-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                Add Task
+              </button>
+            </div>
+          </Link>
+        </div>
+      </div>
+      <div>
+        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+          {isLoading ? (
+            <div class="h-screen bg-white">
+              <div class="flex justify-center items-center h-full">
+                <img
+                  class="h-16 w-16"
+                  src="https://icons8.com/preloaders/preloaders/1488/Iphone-spinner-2.gif"
+                  alt=""
+                />
+              </div>
+            </div>
+          ) : (
             <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
               <table className="min-w-full leading-normal">
                 <thead>
@@ -66,6 +80,7 @@ const TaskList = () => {
                     </th>
                   </tr>
                 </thead>
+
                 {tasks.map((task) => {
                   return (
                     <tbody key={task.id}>
@@ -128,10 +143,10 @@ const TaskList = () => {
                 })}
               </table>
             </div>
-          </div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
