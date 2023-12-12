@@ -30,12 +30,12 @@ export default function UpdateTask() {
       requst.append(key, formData[key]);
     }
     let config = {
-      method: "post",
+      method: "POST",
       maxBodyLength: Infinity,
       url: `https://task.ecmpp.com/api/task/edit`,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      // headers: {
+      //   "Content-Type": "multipart/form-data",
+      // },
       data: requst, // Send form data as the request payload
     };
     console.log(config);
@@ -45,7 +45,7 @@ export default function UpdateTask() {
         console.log(formData);
       })
       .catch((error) => {
-        console.log("error");
+        console.log(error);
       });
   };
   const [selectedImage, setSelectedImage] = useState(null);
@@ -65,6 +65,7 @@ export default function UpdateTask() {
       setFormData((prevData) => ({ ...prevData, Image: file }));
     }
   };
+
   useEffect(() => {
     axios
       .get(`https://task.ecmpp.com/api/task/Show/${taskid}`)
@@ -85,7 +86,7 @@ export default function UpdateTask() {
   return (
     <div>
       <form className="px-28" onSubmit={handleSubmit}>
-        <h1 className="py-6">Add Task</h1>
+        <h1 className="py-6">Update Task Id ({taskid})</h1>
 
         <div className="mb-6">
           <label
@@ -178,13 +179,14 @@ export default function UpdateTask() {
                   htmlFor="file-upload"
                   className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                 >
-                  <span>Upload a image</span>
+                  <span>Update Upload a image</span>
                   <input
                     id="file-upload"
                     name="file-upload"
                     type="file"
                     onChange={handleImageChange}
                     className="sr-only"
+                    required
                   />
                 </label>
                 <p className="pl-1">or drag and drop</p>
@@ -200,7 +202,7 @@ export default function UpdateTask() {
             type="submit"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Submit
+            Update Task
           </button>
         </div>
       </form>

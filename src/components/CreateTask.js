@@ -166,6 +166,7 @@ export default function CreateTask() {
                     type="file"
                     onChange={handleImageChange}
                     className="sr-only"
+                    required
                   />
                 </label>
                 <p className="pl-1">or drag and drop</p>
